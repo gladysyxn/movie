@@ -24,8 +24,29 @@ const movieSchema = new Schema({
     
   rating: {
     type: Number,
-    required: true
-  } 
+      default: 0
+  },
+  runTime: {
+    type: String,
+      default: 'N/A'
+  },
+  actors: {
+    type: String,
+      default: 'N/A'
+  },
+    
+  plot: {
+    type: String,
+      default: 'N/A'
+  },
+    
+  genre: {
+    type: String,
+      default: 'N/A'
+  },
+    
+    
+    
 });
 
 const Movie = mongoose.model('Movie', movieSchema);

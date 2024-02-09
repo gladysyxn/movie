@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/header') %>
+<body>
+  <% if (flashMessages.info) { %>
+    <div class="alert alert-info">
+      <%= flashMessages.info %>
+    </div>
+  <% } %>
+  <div class="container">
+              
+
+            <div class="movie-container">
+              <div class="poster">            
+                <% if (movie.poster) { %>
+                  <img src="<%= movie.poster %>" alt="<%= movie.title %>">
+                <% } %>
+              </div>
+
+              <div class="movie-info">
+                
+            
+                <h3><%= movie.title %> (<%=movie.year %>)</h3> 
+                <h3>Times Watched: <%= movie.timesWatched %></h3> 
+                <h3>Rating: <%= movie.rating %></h3>
+                <h3>Plot: <%=movie.plot %></h3>  
+                  
+                
+              </div>
+            </div>
+  </div>
+</body>
+</html>
+ 
+    
+ 

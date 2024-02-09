@@ -12,9 +12,8 @@ router.post('/search', mainController.searchMovies);
 router.post('/save', mainController.saveMovie);
 router.get('/watch/:id', mainController.watchMovie);
 router.get('/delete/:id', mainController.deleteMovie);
-router.post('/sort', mainController.sortMovies);
-router.post('/rating', mainController.sortRating);
-router.post('/info', mainController.info);
+router.get('/sort/:type', mainController.sortMovies);
+router.get('/info/:id', mainController.info);
 
 // Export the router
 export default router;

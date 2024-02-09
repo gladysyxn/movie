@@ -47,7 +47,11 @@ export const saveMovie = async (req, res) => {
         year: Number(omdbMovie.Year.substring(0,4)),
         boxOffice: omdbMovie.BoxOffice,
         timesWatched: 1,
-        rating: omdbMovie.imdbRating
+        rating: omdbMovie.imdbRating,
+        plot: omdbMovie.Plot,
+        actors: omdbMovie.Actors,
+        genre: omdbMovie.Genre,
+        runTime: omdbMovie.RunTime,
       });
         
     const summary = title + " is watched";
@@ -94,8 +98,22 @@ export const deleteMovie = async (req, res) => {
 
 export const sortMovies = async (req, res) => {
   try {
+    const sortType = req.params.type;
+      if (sortType === 'title') {
     sortCriteria = { title: 1 };
-    res.redirect('/');
+  }
+  else if (sortType === 'year') {
+    sortCriteria = { year: 1 };
+  }
+else if (sortType === 'rating') {
+    sortCriteria = { rating: -1 };
+  }
+else if (sortType === 'timesWatched') {
+    sortCriteria = { timesWatched: -1 };
+  }
+
+      
+res.redirect('/');
   } catch (error) {
     console.error(error);
     res.status(500).send('Error processing request');
@@ -139,39 +157,13 @@ const aggregateMoviesData = async () => {
 
 export const info = async (req, res) => {
   try {
-    sortCriteria = { rating: 1 };
-    res.redirect('/');
+    const movieId = req.params.id;
+    const movie = await Movie.findById(movieId);
+    res.render('info', { movie});
   } catch (error) {
     console.error(error);
     res.status(500).send('Error processing request');
   }
 };
 
-//const info = async (req, res) => {
-//  try {
-//    // Extract IMDb ID from the request body
-//    const { imdbID } = req.body;
-//
-//    // Fetch movie info from OMDB API
-//    const response = await fetch(`http://www.omdbapi.com/?i=${imdbID}&apikey=${process.env.MOVIE_KEY}`);
-//    const omdbMovie = await response.json();
-//
-//    // Extract relevant movie information
-//
-//     
-//const { Title, Year, Plot, Director, Genre, Released } = omdbMovie;
-//    // Send the extracted movie information as a response
-//    res.json({
-//      title: movie.Title,
-//      year: movie.Year,
-//      plot: movie.Plot,
-//      director: movie.Director,
-//      genre: movie.Genre,
-//      released: movie.Released
-//    });
-//  } catch (error) {
-//    // Handle errors
-//    console.error('Error fetching movie info:', error);
-//    res.status(500).json({ error: 'Internal server error' });
-//  }
-//};
+
