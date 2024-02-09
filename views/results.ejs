@@ -1,0 +1,202 @@
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Database</title>
+  <link rel="stylesheet" href="styles.css">
+    
+    
+</head>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Save Movie</title>
+</head>
+<body>
+ add logic to not show images that dont work    
+
+  <div class="container">
+      <table class="table">
+      <tbody>
+        <% movies.forEach((movie) => { %>
+        <tr>
+          <td><%= movie.Title %></td>
+          <td><%= movie.Year %></td>
+          <td><img src="<%= encodeURI(movie.Poster) %>" height="100" width="100"></td>
+          <td>    <form action="/save" method="POST">
+      <input type="hidden" name="imdbID" value="<%= movie.imdbID %>" />
+              
+        <input type="hidden" name="title" value="<%= movie.Title %>" />
+     <input type="hidden" name="year" value="<%= movie.Year %>" />
+      <button type="submit">Save</button>
+    </form> </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+
+    <a href="/">Search Again</a>
+  </div>
+</body>
+</html>
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Database</title>
+  <link rel="stylesheet" href="styles.css">
+    <style>
+.container {
+      margin: auto; 
+      overflow: hidden;
+      width: 80%;
+      position: relative; /* Add relative positioning to the container */
+    }
+
+.table {
+    margin-top:2vw;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.save-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+        
+.movie-image {
+  width: 15vw;
+  height: 20vw;
+}
+.movie-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.movie-details {
+  margin-bottom: 10px;
+}
+
+.save-button {
+  background-color: green; /* Blue */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top:15px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 5px; /* Add rounded borders */
+}
+
+
+.custom-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+        
+.search-form {
+  display: flex;
+  justify-content: center; /* Center items horizontally */
+  margin-bottom: 20px; /* Add margin bottom for spacing */
+}
+
+.search-form {
+  display: flex;
+  justify-content: center; /* Center items horizontally */
+  margin-bottom: 20px; /* Add margin bottom for spacing */
+}
+
+.search-form input[type="text"] {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.search-form button {
+  padding: 10px 20px;
+  background-color: #007bff; /* Blue color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.search-form button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+.container {
+  margin: 20px auto; /* Center the container horizontally */
+}
+        
+.movie-item h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+  text-align: center;
+}
+
+
+
+    </style>
+</head>
+<body>
+  <div class="container">
+      
+    <form class="search-form" action="/search" method="POST">
+      <input class="form-control mr-sm-2" type="text" name="movieTitle" placeholder="Search...">
+      <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+      
+    <table class="table">
+      <tbody>
+        <% movies.forEach((movie, index) => { %>
+          <% if (index % 3 === 0) { %>
+            <tr> <!-- Start a new row for every third movie -->
+          <% } %>
+          <td>
+            <div class="movie-item">
+              <div class="movie-details">
+                <span class="movie-title"><%= movie.Title %></span>
+                <span class="movie-year">(<%= movie.Year %>)</span>
+              </div>
+              <img src="<%= encodeURI(movie.Poster) %>" alt="<%= movie.Title %>" class="movie-image">
+              <form action="/save" method="POST">
+                <input type="hidden" name="imdbID" value="<%= movie.imdbID %>">
+                <input type="hidden" name="title" value="<%= movie.Title %>">
+                <input type="hidden" name="year" value="<%= movie.Year %>">
+                <button type="submit" class="save-button">Save</button>
+              </form>
+            </div>
+          </td>
+          <% if ((index + 1) % 3 === 0 || index === movies.length - 1) { %>
+            </tr> <!-- End the row for every third movie or at the end of the list -->
+          <% } %>
+        <% }); %>
+      </tbody>
+    </table>
+
+  </div>
+    
+      <script>
+    function adjustImageHeight(img) {
+      var aspectRatio = img.naturalWidth / img.naturalHeight;
+      var newHeight = img.width / aspectRatio;
+      img.style.height = newHeight + "px";
+    }
+  </script>
+</body>
+</html>

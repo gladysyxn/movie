@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Database</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+  <style>
+      
+    .container {
+      margin: auto; 
+      overflow: hidden;
+      width: 80%;
+      position: relative; /* Add relative positioning to the container */
+    }
+    
+    .search-form {
+      display: flex;
+      justify-content: flex-start; /* Align items to the left */
+      margin: 20px;
+    }
+    
+    .sorting-rating-form {
+      position: absolute; /* Position relative to its container */
+      top: 20px; /* Adjust top position */
+      right: 20px; /* Adjust right position */
+    }
+
+    .sort { 
+      position: absolute;
+      top: 20px;
+      right: 100px;
+    }
+
+    .saved-movies-heading {
+      margin-top: 40px; /* Add margin top to create space below search bar and sort functions */
+    }
+    .movie-item h3 {
+      margin-top: 10px; /* Add margin top to the title */
+      font-size: 1.2em; /* Adjust font size */
+      color: #333; /* Set text color */
+      text-align: center; /* Center align the title */
+    }
+    
+    .container h2 {
+      margin-top: 20px; /* Adjust margin top for the "Saved Movies" heading */
+    }
+      
+      
+      
+.movie-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally */
+  margin: 20px;
+}
+
+.movie-item img {
+  max-width: 100%; /* Ensure the image doesn't exceed its container */
+  height: auto; /* Maintain aspect ratio */
+  border: 2px solid #ccc; /* Add a 2px solid border with a light gray color */
+  border-radius: 8px; /* Round the edges with an 8px border-radius */
+}
+    
+    .container h2 {
+      margin-top: 20px; /* Adjust margin top for the "Saved Movies" heading */
+    }
+  </style>    
+</head>
+<body>
+  <% if (flashMessages.info) { %>
+    <div class="alert alert-info">
+      <%= flashMessages.info %>
+    </div>
+  <% } %>
+  <div class="container">
+    <form class="search-form" action="/search" method="POST">
+      <input class="form-control mr-sm-2" type="text" name="movieTitle" placeholder="Search...">
+      <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+
+    <h2 class="saved-movies-heading">Saved Movies</h2>
+    <h3>You've watched <%= totalMovies %> movies a total of <%= totalTimesWatched %> times!</h3> 
+    
+    <div class="movie-list">
+      <ul>
+        <% savedMovies.forEach(movie => { %>
+          <div class="movie-item">
+            <% if (movie.poster) { %>
+              <img src="<%= movie.poster %>" alt="<%= movie.title %>">
+            <% } %>
+            <a href="info/"><h3><%= movie.title %></h3></a>
+
+              
+             <h3>Rating: <%= movie.rating %></h3>
+            <div class="movie-actions">
+                <a href="watch/<%= movie._id %>">Watch</a>
+                <a href="delete/<%= movie._id %>">Delete</a>
+              </div>
+              
+            <div class = "movie-rating">
+              
+              
+              
+              </div>
+          </div>
+        <% }); %>
+      </ul>
+    </div>
+  </div> 
+    
+        <form class ="sort" action="/sort" method="POST">
+      <button class="btn btn-secondary" type="submit">Sort</button>
+    </form>
+    
+    <form class="sorting-rating-form" action="/rating" method="POST">
+      <button class="btn btn-secondary" type="submit">Rating</button>
+    </form>
+    
+</body>
+</html>
