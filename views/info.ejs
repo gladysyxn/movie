@@ -40,6 +40,20 @@
         display: inline-block;
         margin-right: 10px; /* Adjust spacing between posters */
     }
+      
+      .scrollable {
+  display: inline-block;
+}
+
+.rec-image-container {
+  display: inline-block;
+}
+
+.rec-image-container img {
+  width: 100px; /* Adjust as needed */
+  height: auto; /* Maintain aspect ratio */
+}
+      
   </style>
 </head>
 <body>
@@ -67,27 +81,29 @@
   </div>
     
   <div class="related-movies-container">
+      <div class = "scrollable">
     <% recs && recs.forEach((movie, index) => { %>
       
-      <div class = "movie-item">
+
       
+<div class="rec-image-container"> 
       <% if (movie.poster_path !== "N/A" && movie.poster_path !== "") {  %>
         <img src="<%= process.env.TMDB_IMG_PREFIX +  movie.poster_path %>" alt="<%= movie.title %>" class="rec">
       <% } else { %>
         <img src="/image.jpg" alt="<%= movie.title %>" class="movie-image">
       <% } %>
       <form action="/save" method="POST">
-        <input type="hidden" name="imdbID" value="<%= movie.imdbID %>">
+        <input type="hidden" name="tmdbID" value="<%= movie.id %>">
         <input type="hidden" name="title" value="<%= movie.Title %>">
-        <input type="hidden" name="year" value="<%= movie.Year %>">
-        <button type="submit" class="save-button">Save</button>
+        <input type="hidden" name="year" value="<%= movie.release_date.slice(0, 4) %>">
+        <button type="submit" class="btn btn-primary" >Save</button>
       </form>
-    </div>
+</div>
     <% }) %>
-          
+      </div>    
           
 </div>
-    
+
     
     
 </body>

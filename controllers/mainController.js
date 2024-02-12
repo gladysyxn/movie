@@ -25,7 +25,7 @@ export const searchMovies = async (req, res) => {
 };
 export const saveMovie = async (req, res) => {
   //const { title, poster, director, year, boxOffice } = req.body;
-    const {imdbID, title, year} = req.body;
+   let {imdbID, title, year, tmdbID} = req.body;
 
   try {
       
@@ -38,6 +38,14 @@ export const saveMovie = async (req, res) => {
       movie.timesWatched += 1;
       await movie.save();
     } else {
+        console.log(tmdbID);
+        
+        if (tmdbID){
+            imdbID = await convertTMDBIDtoOMDBID(tmdbID);
+            
+        }
+        
+        console.log(imdbID);
           const response = await fetch(`http://www.omdbapi.com/?i=${imdbID}&apikey=${process.env.MOVIE_KEY}`);
       const omdbMovie = await response.json();
         console.log(omdbMovie);
@@ -177,7 +185,6 @@ export const info = async (req, res) => {
     const recResult = await recResponse.json();
     recs = recResult.results.slice(0, 10);
 }
-    console.log(recs);
       
       
     res.render('info', {movie, recs});
@@ -202,25 +209,23 @@ export const filterMovies = async (req, res) => {
         filter={};
     }
       
-      
-//      if (genreFilter === 'action') {
-   
-//  }
-//  else if (genreFilter === 'horror') {
-//  }
-//  else if (genreFilter === 'sci-fi') {
-//  }
-//  else if (genreFilter === 'comedy') {
-//  }
-//  else if (genreFilter === 'romance') {
-//  }
-//  else if (genreFilter === 'thriller') {
-//  }
-
-      
 res.redirect('/');
   } catch (error) {
     console.error(error);
     res.status(500).send('Error processing request');
   }
 };
+
+
+
+const convertTMDBIDtoOMDBID = async (tmdbID) => {
+    return new Promise((resolve, reject) => {
+        const response = await fetch(`https://api.themoviedb.org/3/movie/${tmdbID}/external_ids?api_key=${process.env.TMDB_MOVIE_KEY}`);
+    
+    const result = await response.json();
+    console.log(result);
+      resolve(result.imdb_id);
+    }, 
+  });
+    
+}
