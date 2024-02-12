@@ -20,7 +20,6 @@
 
     .poster img {
       max-width: 300px; /* Adjust the size as needed */
-      border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
@@ -30,6 +29,16 @@
 
     .movie-info h3 {
       margin: 5px 0;
+    }
+      
+    .related-movies-container {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    .rec {
+        width: 150px; /* Adjust the width as needed */
+        display: inline-block;
+        margin-right: 10px; /* Adjust spacing between posters */
     }
   </style>
 </head>
@@ -53,7 +62,33 @@
         <h3>Genre: <%= movie.genre %></h3>
         <h3>Plot: <%=movie.plot %></h3>  
       </div>
+        
     </div>
   </div>
+    
+  <div class="related-movies-container">
+    <% recs && recs.forEach((movie, index) => { %>
+      
+      <div class = "movie-item">
+      
+      <% if (movie.poster_path !== "N/A" && movie.poster_path !== "") {  %>
+        <img src="<%= process.env.TMDB_IMG_PREFIX +  movie.poster_path %>" alt="<%= movie.title %>" class="rec">
+      <% } else { %>
+        <img src="/image.jpg" alt="<%= movie.title %>" class="movie-image">
+      <% } %>
+      <form action="/save" method="POST">
+        <input type="hidden" name="imdbID" value="<%= movie.imdbID %>">
+        <input type="hidden" name="title" value="<%= movie.Title %>">
+        <input type="hidden" name="year" value="<%= movie.Year %>">
+        <button type="submit" class="save-button">Save</button>
+      </form>
+    </div>
+    <% }) %>
+          
+          
+</div>
+    
+    
+    
 </body>
 </html>

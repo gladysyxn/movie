@@ -165,12 +165,22 @@ export const info = async (req, res) => {
     const movieId = req.params.id;
     const movie = await Movie.findById(movieId);
       
-//    const response = await fetch(`http://www.omdbapi.com/?s=${movieTitle}&apikey=${process.env.MOVIE_KEY}`);
-//    const movies = await response.json();
-//    console.log(movies);
-//      
+    let movieTitle = encodeURI(movie.title);  
+    let recs = [];
+    
+    const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${movieTitle}&include_adult=false&language=en-US&page=1&api_key=${process.env.TMDB_MOVIE_KEY}`);
+    const searchResult = await response.json();
+    if (searchResult.total_results > 0) {
+     const tmdb_id = searchResult.results[0].id;
+    const recResponse = await fetch(`https://api.themoviedb.org/3/movie/${tmdb_id}/recommendations?language=en-US&page=1&api_key=${process.env.TMDB_MOVIE_KEY}`);
+    
+    const recResult = await recResponse.json();
+    recs = recResult.results.slice(0, 10);
+}
+    console.log(recs);
       
-    res.render('info', { movie});
+      
+    res.render('info', {movie, recs});
   } catch (error) {
     console.error(error);
     res.status(500).send('Error processing request');
