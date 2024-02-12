@@ -1,47 +1,4 @@
-<!--
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Movie Database</title>
-  <link rel="stylesheet" href="styles.css">
-    
-    
-</head>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Save Movie</title>
-</head>
-<body>
- add logic to not show images that dont work    
 
-  <div class="container">
-      <table class="table">
-      <tbody>
-        <% movies.forEach((movie) => { %>
-        <tr>
-          <td><%= movie.Title %></td>
-          <td><%= movie.Year %></td>
-          <td><img src="<%= encodeURI(movie.Poster) %>" height="100" width="100"></td>
-          <td>    <form action="/save" method="POST">
-      <input type="hidden" name="imdbID" value="<%= movie.imdbID %>" />
-              
-        <input type="hidden" name="title" value="<%= movie.Title %>" />
-     <input type="hidden" name="year" value="<%= movie.Year %>" />
-      <button type="submit">Save</button>
-    </form> </td>
-        </tr>
-        <% }); %>
-      </tbody>
-    </table>
-
-    <a href="/">Search Again</a>
-  </div>
-</body>
-</html>
-
--->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -163,7 +120,8 @@
       
     <table class="table">
       <tbody>
-        <% movies.forEach((movie, index) => { %>
+           
+        <% movies && movies.forEach((movie, index) => { %>
           <% if (index % 3 === 0) { %>
             <tr> <!-- Start a new row for every third movie -->
           <% } %>
@@ -173,7 +131,11 @@
                 <span class="movie-title"><%= movie.Title %></span>
                 <span class="movie-year">(<%= movie.Year %>)</span>
               </div>
+                <% if (movie.Poster !== "N/A" && movie.Poster !== "") {  %>
               <img src="<%= encodeURI(movie.Poster) %>" alt="<%= movie.Title %>" class="movie-image">
+                <% } else { %>
+                    <img src="/image.jpg"alt="<%= movie.title %>" class="movie-image">
+                  <%}%> 
               <form action="/save" method="POST">
                 <input type="hidden" name="imdbID" value="<%= movie.imdbID %>">
                 <input type="hidden" name="title" value="<%= movie.Title %>">

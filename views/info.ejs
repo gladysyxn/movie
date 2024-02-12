@@ -1,6 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('partials/header') %>
+<head>
+  <style>
+    .container {
+      margin: 20px auto;
+      max-width: 800px;
+    }
+
+    .movie-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .poster {
+      flex: 0 0 auto;
+      margin-right: 20px;
+    }
+
+    .poster img {
+      max-width: 300px; /* Adjust the size as needed */
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .movie-info {
+      flex: 1;
+    }
+
+    .movie-info h3 {
+      margin: 5px 0;
+    }
+  </style>
+</head>
 <body>
   <% if (flashMessages.info) { %>
     <div class="alert alert-info">
@@ -8,29 +40,20 @@
     </div>
   <% } %>
   <div class="container">
-              
-
-            <div class="movie-container">
-              <div class="poster">            
-                <% if (movie.poster) { %>
-                  <img src="<%= movie.poster %>" alt="<%= movie.title %>">
-                <% } %>
-              </div>
-
-              <div class="movie-info">
-                
-            
-                <h3><%= movie.title %> (<%=movie.year %>)</h3> 
-                <h3>Times Watched: <%= movie.timesWatched %></h3> 
-                <h3>Rating: <%= movie.rating %></h3>
-                <h3>Plot: <%=movie.plot %></h3>  
-                  
-                
-              </div>
-            </div>
+    <div class="movie-container">
+      <div class="poster">            
+        <% if (movie.poster) { %>
+          <img src="<%= movie.poster %>" alt="<%= movie.title %>">
+        <% } %>
+      </div>
+      <div class="movie-info">
+        <h3><%= movie.title %> (<%=movie.year %>)</h3> 
+        <h3>Times Watched: <%= movie.timesWatched %></h3> 
+        <h3>Rating: <%= movie.rating %></h3>
+        <h3>Genre: <%= movie.genre %></h3>
+        <h3>Plot: <%=movie.plot %></h3>  
+      </div>
+    </div>
   </div>
 </body>
 </html>
- 
-    
- 

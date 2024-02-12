@@ -1,15 +1,19 @@
 import Movie from '../models/Movie.js';
-let savedMovies, totalMovies, totalTimesWatched, sortCriteria;
+let savedMovies, totalMovies, totalTimesWatched, sortCriteria, sortType, genreFilter, filter;
 
 export const showMovies = async (req, res) => {
   await aggregateMoviesData();
-  savedMovies = await Movie.find().sort(sortCriteria);
-  res.render('index', { savedMovies, totalMovies, totalTimesWatched });
+  savedMovies = await Movie.find(filter).sort(sortCriteria);
+  res.render('index', { savedMovies, totalMovies, totalTimesWatched, sortType });
 }
 
 export const searchMovies = async (req, res) => {
   const movieTitle = req.body.movieTitle;
   try {
+    if (movieTitle === "" ){
+        req.flash('warning', "Please enter a keyword." );
+        res.redirect('/');
+    }
     const response = await fetch(`http://www.omdbapi.com/?s=${movieTitle}&apikey=${process.env.MOVIE_KEY}`);
     const movies = await response.json();
     console.log(movies);
@@ -19,7 +23,6 @@ export const searchMovies = async (req, res) => {
     res.status(500).send('Error fetching data');
   }
 };
-
 export const saveMovie = async (req, res) => {
   //const { title, poster, director, year, boxOffice } = req.body;
     const {imdbID, title, year} = req.body;
@@ -54,8 +57,7 @@ export const saveMovie = async (req, res) => {
         runTime: omdbMovie.RunTime,
       });
         
-    const summary = title + " is watched";
-        
+    const summary = title + " is watched";  
       await movie.save();
         // Add flash message
         req.flash('info', summary);
@@ -75,6 +77,9 @@ export const watchMovie = async (req, res) => {
     if (movie) {
       movie.timesWatched += 1;
       await movie.save();
+      const summary = movie.title + " is watched";
+      req.flash('info', summary);
+     
     }
     res.redirect('/');
   } catch (error) {
@@ -98,7 +103,7 @@ export const deleteMovie = async (req, res) => {
 
 export const sortMovies = async (req, res) => {
   try {
-    const sortType = req.params.type;
+    sortType = req.params.type;
       if (sortType === 'title') {
     sortCriteria = { title: 1 };
   }
@@ -159,11 +164,53 @@ export const info = async (req, res) => {
   try {
     const movieId = req.params.id;
     const movie = await Movie.findById(movieId);
+      
+//    const response = await fetch(`http://www.omdbapi.com/?s=${movieTitle}&apikey=${process.env.MOVIE_KEY}`);
+//    const movies = await response.json();
+//    console.log(movies);
+//      
+      
     res.render('info', { movie});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error processing request');
+    
+  }
+};
+
+
+    
+export const filterMovies = async (req, res) => {
+  try {
+    
+    genreFilter= req.query.genre;
+    
+    if (genreFilter != ""){
+        filter = {'genre': new RegExp( genreFilter, "i") };
+    }
+    else {
+        filter={};
+    }
+      
+      
+//      if (genreFilter === 'action') {
+   
+//  }
+//  else if (genreFilter === 'horror') {
+//  }
+//  else if (genreFilter === 'sci-fi') {
+//  }
+//  else if (genreFilter === 'comedy') {
+//  }
+//  else if (genreFilter === 'romance') {
+//  }
+//  else if (genreFilter === 'thriller') {
+//  }
+
+      
+res.redirect('/');
   } catch (error) {
     console.error(error);
     res.status(500).send('Error processing request');
   }
 };
-
-

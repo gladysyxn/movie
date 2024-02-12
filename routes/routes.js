@@ -14,6 +14,7 @@ router.get('/watch/:id', mainController.watchMovie);
 router.get('/delete/:id', mainController.deleteMovie);
 router.get('/sort/:type', mainController.sortMovies);
 router.get('/info/:id', mainController.info);
+router.get('/filter', mainController.filterMovies);
 
 // Export the router
 export default router;
