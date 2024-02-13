@@ -1,10 +1,11 @@
 import Movie from '../models/Movie.js';
-let savedMovies, totalMovies, totalTimesWatched, sortCriteria, sortType, genreFilter, filter;
+let savedMovies, totalMovies, totalTimesWatched, sortCriteria, sortType, genreFilter, filter, allGenreTypes;
 
 export const showMovies = async (req, res) => {
   await aggregateMoviesData();
   savedMovies = await Movie.find(filter).sort(sortCriteria);
-  res.render('index', { savedMovies, totalMovies, totalTimesWatched, sortType });
+  allGenreTypes = await Movie.distinct('genre').sort();
+  res.render('index', { savedMovies, totalMovies, totalTimesWatched, sortType, allGenreTypes, genreFilter});
 }
 
 export const searchMovies = async (req, res) => {
@@ -31,7 +32,7 @@ export const saveMovie = async (req, res) => {
      
      
       // Check if the movie already exists in the database
-    let movie = await Movie.findOne({ title: title });
+    let movie = await Movie.findOne({ title: title, year: year });
 
     if (movie) {
       // If movie exists, increment the timesWatched
@@ -58,7 +59,7 @@ export const saveMovie = async (req, res) => {
         rating: omdbMovie.imdbRating,
         plot: omdbMovie.Plot,
         actors: omdbMovie.Actors,
-        genre: omdbMovie.Genre,
+        genre: omdbMovie.Genre.split(', '),
         runTime: omdbMovie.RunTime,
       });
        
@@ -142,6 +143,9 @@ export const sortRating = async (req, res) => {
 
 const aggregateMoviesData = async () => {
   try {
+      
+    totalMovies = 0;
+      totalTimesWatched = 0;
     const result = await Movie.aggregate([
       {
         $group: {
@@ -175,14 +179,21 @@ export const info = async (req, res) => {
    
     const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${movieTitle}&include_adult=false&language=en-US&page=1&api_key=${process.env.TMDB_MOVIE_KEY}`);
     const searchResult = await response.json();
+      
+    
     if (searchResult.total_results > 0) {
-    const tmdb_id = searchResult.results[0].id;
-    const recResponse = await fetch(`https://api.themoviedb.org/3/movie/${tmdb_id}/recommendations?language=en-US&page=1&api_key=${process.env.TMDB_MOVIE_KEY}`);
-   
-    const recResult = await recResponse.json();
-    recs = recResult.results.slice(0, 10);
-}
+      let tmdb_id = "";
+      searchResult.results.forEach( result => {
+          if (result.release_date && result.release_date.slice(0, 4) === `${movie.year}`)
+            tmdb_id = result.id;
+      });
+
+      const recResponse = await fetch(`https://api.themoviedb.org/3/movie/${tmdb_id}/recommendations?language=en-US&page=1&api_key=${process.env.TMDB_MOVIE_KEY}`);
      
+      const recResult = await recResponse.json();
+
+      recs = recResult.results.slice(0, 10);
+    }
      
     res.render('info', {movie, recs});
   } catch (error) {

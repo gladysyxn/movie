@@ -167,44 +167,35 @@ ul {
       Sort by:
       <select onchange="window.location=this.value">
         <option value="">Select an option</option>
-          
-        <option value="/sort/title" <% if (sortType === 'title') { %> selected <% } %> >Movie Title</option>
-          
-          
-        <option value="/sort/year"<% if (sortType === 'year') { %> selected <% } %> >Release Year</option>
-          
-          
-        <option value="/sort/timesWatched" <% if (sortType === 'timesWatched') { %> selected <% } %> >Frequently Watched</option>
-          
-          
-        <option value="/sort/rating"<% if (sortType === 'rating') { %> selected <% } %>>Highly Rated</option>
-          
+       <% 
+          let optionDisplays = { 
+            title : 'Movie Title', 
+            year : 'Release Year',
+            timesWatched: 'Frequently Watched',
+            rating: 'Highly Rated'
+          }; 
+           Object.keys(optionDisplays).forEach(type => { %>
+              <option value="/sort/<%= type %>" <% if (sortType === type) { %> selected <% } %> ><%= optionDisplays[type] %></option>
+          <% }); %>
           
       </select>   
     </div>
       
     <div class="select-container">
         Filter by Genre: <select onchange="window.location=this.value">
+
         <option value="">Select an option</option>
         
-        <option value="filter?genre=action" >Action</option>
-        
-        <option value="filter?genre=horror" >Horror</option>
-        
-        <option value="filter?genre=sci-fi" >Sci-Fi</option>
-        
-        <option value="filter?genre=comedy" >Comedy</option>
-        
-        <option value="filter?genre=romance" >Romance</option>
-        
-        <option value="filter?genre=thriller" >Thriller</option>
-        
+          <%  
+           allGenreTypes.forEach(filter => { %>
+              <option value="/filter?genre=<%= filter %>" <% if (genreFilter === filter) { %> selected <% } %> ><%= filter %></option>
+          <% }); %>
+
         <option value="filter?genre=" >Remove filter</option>
         
         
         </select>
       </div>
-
     <div class="movie-list">
       <ul>
         <% savedMovies.forEach(movie => { %>

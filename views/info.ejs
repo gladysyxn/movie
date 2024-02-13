@@ -116,13 +116,16 @@ nav {
 }
 
 .relTitle {
-  position: absolute; /* Position the title absolutely */
-  top: 0; /* Align the title to the top */
-  left: 0; /* Align the title to the left */         
-  margin: 40px; /* Add margin for spacing */
+  position: relative;
+  top: 0;
+  left: 0;
+  margin-bottom: 30px;
   color: white;
   font-size: 2vw;
+  text-align: left;
 }
+      
+
 .save {
   display: inline-block;
   padding: 3px 15px;
@@ -178,8 +181,8 @@ nav {
     
 <div class="related-movies-container">
   <div class="container">
-    <h2 class="relTitle">Related Movies:</h2> <!-- Move the h2 tag inside the container -->
     <div class="scrollable">
+     <h2 class="relTitle">Related Movies:</h2>  
       <% recs && recs.forEach((movie, index) => { %>
         <div class="rec-image-container"> 
           <% if (movie.poster_path !== "N/A" && movie.poster_path !== "") {  %>
@@ -191,7 +194,7 @@ nav {
             
           <form action="/save" method="POST">
             <input type="hidden" name="tmdbID" value="<%= movie.id %>">
-            <input type="hidden" name="title" value="<%= movie.Title %>">
+            <input type="hidden" name="title" value="<%= movie.title %>">
             <input type="hidden" name="year" value="<%= movie.release_date.slice(0, 4) %>">
             <button type="submit" class="save">Save</button>
               

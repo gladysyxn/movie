@@ -41,8 +41,8 @@ const movieSchema = new Schema({
   },
     
   genre: {
-    type: String,
-      default: 'N/A'
+    type: [String],
+      default: []
   },
     
     
