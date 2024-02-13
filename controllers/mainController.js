@@ -17,7 +17,7 @@ export const searchMovies = async (req, res) => {
     const response = await fetch(`http://www.omdbapi.com/?s=${movieTitle}&apikey=${process.env.MOVIE_KEY}`);
     const movies = await response.json();
     console.log(movies);
-      
+     
     res.render('results', {movies: movies.Search});
   } catch (error) {
     res.status(500).send('Error fetching data');
@@ -28,8 +28,8 @@ export const saveMovie = async (req, res) => {
    let {imdbID, title, year, tmdbID} = req.body;
 
   try {
-      
-      
+     
+     
       // Check if the movie already exists in the database
     let movie = await Movie.findOne({ title: title });
 
@@ -38,18 +38,15 @@ export const saveMovie = async (req, res) => {
       movie.timesWatched += 1;
       await movie.save();
     } else {
-        console.log(tmdbID);
-        
+       
         if (tmdbID){
             imdbID = await convertTMDBIDtoOMDBID(tmdbID);
-            
+           
         }
-        
-        console.log(imdbID);
-          const response = await fetch(`http://www.omdbapi.com/?i=${imdbID}&apikey=${process.env.MOVIE_KEY}`);
-      const omdbMovie = await response.json();
+        const response = await fetch(`http://www.omdbapi.com/?i=${imdbID}&apikey=${process.env.MOVIE_KEY}`);
+        const omdbMovie = await response.json();
         console.log(omdbMovie);
-        
+       
       // If movie doesn't exist, create a new one
       movie = new Movie({
         title: omdbMovie.Title,
@@ -64,8 +61,8 @@ export const saveMovie = async (req, res) => {
         genre: omdbMovie.Genre,
         runTime: omdbMovie.RunTime,
       });
-        
-    const summary = title + " is watched";  
+       
+    const summary = movie.title + " is watched";  
       await movie.save();
         // Add flash message
         req.flash('info', summary);
@@ -116,7 +113,7 @@ export const sortMovies = async (req, res) => {
     sortCriteria = { title: 1 };
   }
   else if (sortType === 'year') {
-    sortCriteria = { year: 1 };
+    sortCriteria = { year: -1 };
   }
 else if (sortType === 'rating') {
     sortCriteria = { rating: -1 };
@@ -125,7 +122,7 @@ else if (sortType === 'timesWatched') {
     sortCriteria = { timesWatched: -1 };
   }
 
-      
+     
 res.redirect('/');
   } catch (error) {
     console.error(error);
@@ -172,43 +169,43 @@ export const info = async (req, res) => {
   try {
     const movieId = req.params.id;
     const movie = await Movie.findById(movieId);
-      
-    let movieTitle = encodeURI(movie.title);  
+     
+    let movieTitle = encodeURI(movie.title, movie.Title);  
     let recs = [];
-    
+   
     const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${movieTitle}&include_adult=false&language=en-US&page=1&api_key=${process.env.TMDB_MOVIE_KEY}`);
     const searchResult = await response.json();
     if (searchResult.total_results > 0) {
-     const tmdb_id = searchResult.results[0].id;
+    const tmdb_id = searchResult.results[0].id;
     const recResponse = await fetch(`https://api.themoviedb.org/3/movie/${tmdb_id}/recommendations?language=en-US&page=1&api_key=${process.env.TMDB_MOVIE_KEY}`);
-    
+   
     const recResult = await recResponse.json();
     recs = recResult.results.slice(0, 10);
 }
-      
-      
+     
+     
     res.render('info', {movie, recs});
   } catch (error) {
     console.error(error);
     res.status(500).send('Error processing request');
-    
+   
   }
 };
 
 
-    
+   
 export const filterMovies = async (req, res) => {
   try {
-    
+   
     genreFilter= req.query.genre;
-    
+   
     if (genreFilter != ""){
         filter = {'genre': new RegExp( genreFilter, "i") };
     }
     else {
         filter={};
     }
-      
+     
 res.redirect('/');
   } catch (error) {
     console.error(error);
@@ -217,15 +214,8 @@ res.redirect('/');
 };
 
 
-
 const convertTMDBIDtoOMDBID = async (tmdbID) => {
-    return new Promise((resolve, reject) => {
-        const response = await fetch(`https://api.themoviedb.org/3/movie/${tmdbID}/external_ids?api_key=${process.env.TMDB_MOVIE_KEY}`);
-    
+    const response = await fetch(`https://api.themoviedb.org/3/movie/${tmdbID}/external_ids?api_key=${process.env.TMDB_MOVIE_KEY}`);
     const result = await response.json();
-    console.log(result);
-      resolve(result.imdb_id);
-    }, 
-  });
-    
+    return result.imdb_id;
 }

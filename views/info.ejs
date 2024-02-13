@@ -3,46 +3,106 @@
 <%- include('partials/header') %>
 <head>
   <style>
-    .container {
-      margin: 20px auto;
-      max-width: 800px;
-    }
-
-    .movie-container {
-      display: flex;
-      align-items: center;
-    }
-
-    .poster {
-      flex: 0 0 auto;
-      margin-right: 20px;
-    }
-
-    .poster img {
-      max-width: 300px; /* Adjust the size as needed */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .movie-info {
-      flex: 1;
-    }
-
-    .movie-info h3 {
-      margin: 5px 0;
-    }
       
-    .related-movies-container {
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-    .rec {
-        width: 150px; /* Adjust the width as needed */
-        display: inline-block;
-        margin-right: 10px; /* Adjust spacing between posters */
-    }
       
-      .scrollable {
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
+      
+h2, h3{
+  font-family: "Titillium Web", sans-serif;   
+}
+      
+nav {
+  background-color: #7575a3; /* Background color for the navigation bar */
+  padding: 10px; /* Add padding for better spacing */
+  position: fixed; /* Position the navigation bar fixed to the top */
+  top: 0; /* Align the navigation bar to the top */
+  left: 0; /* Align the navigation bar to the left */
+  width: 100%; /* Stretch the navigation bar to the full width of the viewport */
+  z-index: 999; /* Ensure the navigation bar stays on top of other elements */
+}
+
+
+    nav a {
+      color: white; /* Text color for the anchor tag */
+      text-decoration: none; /* Remove underline from the anchor tag */
+      padding: 5px 10px; /* Add padding to the anchor tag */
+      border-radius: 5px; /* Add rounded corners */
+      transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+        
+      font-family: "Titillium Web", sans-serif;  
+      font-size: 18px;
+    }
+
+    nav a:hover {
+      background-color: #5d5d91; /* Darker background color on hover */
+      text-decoration: none;
+      color: white;
+      font-size: 18px;
+    }
+               
+      
+.container2 {
+  padding-right: 100px;
+  padding-left: 100px;
+  background-color: #c2c2d6;
+
+}
+   
+      
+.container {
+  margin: 20px auto;
+  padding: 50px 50px 25px 50px;
+  background-color: #9494b8;
+}
+      
+
+.movie-container {
+  display: flex;
+  align-items: center;
+}
+
+.poster {
+  flex: 0 0 auto;
+  padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+.poster img {
+  max-width: 100%; /* Ensure image fits container */
+  border-radius: 10px; /* Add border radius */
+  border: 3px solid #7575a3; /* Add border */
+  box-sizing: border-box; /* Include border in image dimensions*/
+  margin-right: 40px;
+}
+
+
+.movie-info {
+  flex: 1;
+}
+
+.movie-info h3 {
+  margin: 10px 0; /* Increase margin for better spacing */
+  font-size: 18px; /* Adjust font size of movie info */
+}
+
+.related-movies-container {
+  text-align: center;
+  margin-top: 50px;
+  position: relative;
+}
+
+
+.scrollable {
   display: inline-block;
+  white-space: nowrap;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.rec {
+  width: 150px;
+  display: inline-block;
+  margin-right: 10px;
 }
 
 .rec-image-container {
@@ -50,19 +110,55 @@
 }
 
 .rec-image-container img {
-  width: 100px; /* Adjust as needed */
-  height: auto; /* Maintain aspect ratio */
+  width: 100px;
+  height: auto;
+  border-radius: 8px; /* Add border radius */
+}
+
+.relTitle {
+  position: absolute; /* Position the title absolutely */
+  top: 0; /* Align the title to the top */
+  left: 0; /* Align the title to the left */         
+  margin: 40px; /* Add margin for spacing */
+  color: white;
+  font-size: 2vw;
+}
+.save {
+  display: inline-block;
+  padding: 3px 15px;
+  background-color: #8585ad; /* Blue color */
+  color: #fff; /* White text color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 13px;
+  margin-right: 10px; /* Add some spacing between buttons */
+  font-family: "Titillium Web", sans-serif;
+  margin-top: 15px;
 }
       
+.save:hover {
+  background-color: #5c5c8a; /* Darker blue color on hover */
+}  
+
   </style>
 </head>
-<body>
+<body style="background-color: #666699;">
   <% if (flashMessages.info) { %>
     <div class="alert alert-info">
       <%= flashMessages.info %>
     </div>
   <% } %>
-  <div class="container">
+    
+<nav>
+    <a href="/">Back to Saved</a> <!-- Link to the index page -->
+</nav>
+    
+    
+    
+    
+  <div class="container2">
     <div class="movie-container">
       <div class="poster">            
         <% if (movie.poster) { %>
@@ -70,7 +166,7 @@
         <% } %>
       </div>
       <div class="movie-info">
-        <h3><%= movie.title %> (<%=movie.year %>)</h3> 
+        <h2><%= movie.title %> (<%=movie.year %>)</h2> 
         <h3>Times Watched: <%= movie.timesWatched %></h3> 
         <h3>Rating: <%= movie.rating %></h3>
         <h3>Genre: <%= movie.genre %></h3>
@@ -80,31 +176,32 @@
     </div>
   </div>
     
-  <div class="related-movies-container">
-      <div class = "scrollable">
-    <% recs && recs.forEach((movie, index) => { %>
-      
-
-      
-<div class="rec-image-container"> 
-      <% if (movie.poster_path !== "N/A" && movie.poster_path !== "") {  %>
-        <img src="<%= process.env.TMDB_IMG_PREFIX +  movie.poster_path %>" alt="<%= movie.title %>" class="rec">
-      <% } else { %>
-        <img src="/image.jpg" alt="<%= movie.title %>" class="movie-image">
-      <% } %>
-      <form action="/save" method="POST">
-        <input type="hidden" name="tmdbID" value="<%= movie.id %>">
-        <input type="hidden" name="title" value="<%= movie.Title %>">
-        <input type="hidden" name="year" value="<%= movie.release_date.slice(0, 4) %>">
-        <button type="submit" class="btn btn-primary" >Save</button>
-      </form>
+<div class="related-movies-container">
+  <div class="container">
+    <h2 class="relTitle">Related Movies:</h2> <!-- Move the h2 tag inside the container -->
+    <div class="scrollable">
+      <% recs && recs.forEach((movie, index) => { %>
+        <div class="rec-image-container"> 
+          <% if (movie.poster_path !== "N/A" && movie.poster_path !== "") {  %>
+            <img src="<%= process.env.TMDB_IMG_PREFIX +  movie.poster_path %>" alt="<%= movie.title %>" class="rec">
+          <% } else { %>
+            <img src="/image.jpg" alt="<%= movie.title %>" class="movie-image">
+          <% } %>
+            
+            
+          <form action="/save" method="POST">
+            <input type="hidden" name="tmdbID" value="<%= movie.id %>">
+            <input type="hidden" name="title" value="<%= movie.Title %>">
+            <input type="hidden" name="year" value="<%= movie.release_date.slice(0, 4) %>">
+            <button type="submit" class="save">Save</button>
+              
+              
+          </form>
+        </div>
+      <% }) %>
+    </div>    
+  </div>
 </div>
-    <% }) %>
-      </div>    
-          
-</div>
 
-    
-    
 </body>
 </html>

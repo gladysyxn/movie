@@ -1,116 +1,138 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Movie Database</title>
   <link rel="stylesheet" href="styles.css">
-    <style>
-.container {
-      margin: auto; 
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
+
+    .container {
+      margin: 40px auto; /* Add margin to the top and bottom */
+      padding-top: 40px; /* Add padding to the top */
       overflow: hidden;
       width: 80%;
       position: relative; /* Add relative positioning to the container */
+      background-color: #c2c2d6; /* Set the background color of the container */
     }
 
-.table {
-    margin-top:2vw;
-  width: 100%;
-  border-collapse: collapse;
-}
+    .movie-item {
+      display: flex;
+      flex-wrap: wrap; /* Allow movie items to wrap to the next line */
+      justify-content: space-between; /* Distribute items evenly */
+      padding: 10px; /* Adjust padding */
+    }
 
-.save-button:hover {
-  background-color: #45a049; /* Darker green on hover */
-}
-        
-.movie-image {
-  width: 15vw;
-  height: 20vw;
-}
-.movie-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-}
+    .movie-details {
+      margin-bottom: 10px;
+      width: calc(25% - 20px); /* Calculate 25% width for each movie item */
+      padding: 10px; /* Adjust padding */
+      box-sizing: border-box; /* Include padding in width calculation */
+      text-align: center; /* Center text */
+    }
 
-.movie-details {
-  margin-bottom: 10px;
-}
+    .movie-title,
+    .movie-year {
+      font-size: 16px;
+      font-family: "Titillium Web", sans-serif;
+    }
 
-.save-button {
-  background-color: green; /* Blue */
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin-top:15px;
-  transition-duration: 0.4s;
-  cursor: pointer;
-  border-radius: 5px; /* Add rounded borders */
-}
+    .movie-image {
+      width: 15vw; /* Make images fill the container */
+      height: 23vw; /* Maintain aspect ratio */
+      border-radius: 10px; /* Add border radius */
+      border: 3px solid #7575a3; /* Add border */
+    }
 
+    .save-button {
+      background-color: #9f9fdf; /* Blue */
+      border: none;
+      color: white;
+      padding: 5px 15px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-top: 15px;
+      cursor: pointer;
+      border-radius: 5px; /* Add rounded borders */
+      font-family: "Titillium Web", sans-serif;
+    }
 
-.custom-button:hover {
-  background-color: #45a049; /* Darker green on hover */
-}
-        
-.search-form {
-  display: flex;
-  justify-content: center; /* Center items horizontally */
-  margin-bottom: 20px; /* Add margin bottom for spacing */
-}
+    .save-button:hover {
+      background-color: #7979d2; /* Darker green on hover */
+    }
 
-.search-form {
-  display: flex;
-  justify-content: center; /* Center items horizontally */
-  margin-bottom: 20px; /* Add margin bottom for spacing */
-}
+    .search-form {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 90%; /* Reduce the width of the search form */
+      margin: 0 auto; /* Center the search form horizontally */
+      padding: 10px; /* Reduce padding for a smaller form */
+      box-sizing: border-box;
+    }
 
-.search-form input[type="text"] {
-  padding: 10px;
-  width: 300px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  margin-right: 10px;
-}
+    .search-form input[type="text"] {
+      flex: 1;
+      margin-right: 10px; /* Reduce spacing between input and button */
+      padding: 8px; /* Reduce padding for the input field */
+      font-size: 14px; /* Reduce font size */
+      border-radius: 5px;
+      font-family: "Titillium Web", sans-serif;
+    }
 
-.search-form button {
-  padding: 10px 20px;
-  background-color: #007bff; /* Blue color */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
+    .search-form button {
+      background-color: #9494b8;
+      color: white;
+      border: none;
+      border-radius: 5px; /* Reduce border radius */
+      cursor: pointer;
+      font-size: 14px; /* Reduce font size */
+      padding: 8px 16px; /* Reduce padding for the button */
+      transition: background-color 0.3s ease;
+      font-family: "Titillium Web", sans-serif;
+    }
 
-.search-form button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
-}
+    .search-form button:hover {
+      background-color: #d1d1e0;
+    }
 
+    nav {
+      background-color: #a3a3c2; /* Background color for the navigation bar */
+      padding: 10px; /* Add padding for better spacing */
+      position: fixed; /* Position the navigation bar fixed to the top */
+      top: 0; /* Align the navigation bar to the top */
+      left: 0; /* Align the navigation bar to the left */
+      width: 100%; /* Stretch the navigation bar to the full width of the viewport */
+      z-index: 999; /* Ensure the navigation bar stays on top of other elements */
+    }
 
-.container {
-  margin: 20px auto; /* Center the container horizontally */
-}
-        
-.movie-item h3 {
-  font-size: 18px;
-  font-weight: bold;
-  margin-top: 10px;
-  text-align: center;
-}
+    nav a {
+      color: white; /* Text color for the anchor tag */
+      text-decoration: none; /* Remove underline from the anchor tag */
+      padding: 5px 10px; /* Add padding to the anchor tag */
+      border-radius: 5px; /* Add rounded corners */
+      transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+      font-family: "Titillium Web", sans-serif;  
+      font-size: 18px;
+    }
 
-
-
-    </style>
+    nav a:hover {
+      background-color: #8585ad; /* Darker background color on hover */
+      text-decoration: none;
+      color: white;
+      font-size: 18px;
+    }
+  </style>
 </head>
-<body>
+<body style="background-color: #666699;">
+
+<nav>
+    <a href="/">Back to Saved</a> <!-- Link to the index page -->
+</nav>
+    
+    
   <div class="container">
       
     <form class="search-form" action="/search" method="POST">
@@ -118,47 +140,25 @@
       <button class="btn btn-primary" type="submit">Search</button>
     </form>
       
-    <table class="table">
-      <tbody>
-           
-        <% movies && movies.forEach((movie, index) => { %>
-          <% if (index % 3 === 0) { %>
-            <tr> <!-- Start a new row for every third movie -->
+    <div class="movie-item">
+      <% movies && movies.forEach((movie, index) => { %>
+        <div class="movie-details">
+          <span class="movie-title"><%= movie.Title %></span>      
+          <span class="movie-year">(<%= movie.Year %>)</span>
+          <% if (movie.Poster !== "N/A" && movie.Poster !== "") {  %>
+            <img src="<%= encodeURI(movie.Poster) %>" alt="<%= movie.Title %>" class="movie-image">
+          <% } else { %>
+            <img src="/image.jpg" alt="<%= movie.title %>" class="movie-image">
           <% } %>
-          <td>
-            <div class="movie-item">
-              <div class="movie-details">
-                <span class="movie-title"><%= movie.Title %></span>
-                <span class="movie-year">(<%= movie.Year %>)</span>
-              </div>
-                <% if (movie.Poster !== "N/A" && movie.Poster !== "") {  %>
-              <img src="<%= encodeURI(movie.Poster) %>" alt="<%= movie.Title %>" class="movie-image">
-                <% } else { %>
-                    <img src="/image.jpg"alt="<%= movie.title %>" class="movie-image">
-                  <%}%> 
-              <form action="/save" method="POST">
-                <input type="hidden" name="imdbID" value="<%= movie.imdbID %>">
-                <input type="hidden" name="title" value="<%= movie.Title %>">
-                <input type="hidden" name="year" value="<%= movie.Year %>">
-                <button type="submit" class="save-button">Save</button>
-              </form>
-            </div>
-          </td>
-          <% if ((index + 1) % 3 === 0 || index === movies.length - 1) { %>
-            </tr> <!-- End the row for every third movie or at the end of the list -->
-          <% } %>
-        <% }); %>
-      </tbody>
-    </table>
-
-  </div>
-    
-      <script>
-    function adjustImageHeight(img) {
-      var aspectRatio = img.naturalWidth / img.naturalHeight;
-      var newHeight = img.width / aspectRatio;
-      img.style.height = newHeight + "px";
-    }
-  </script>
-</body>
-</html>
+          <form action="/save" method="POST">
+            <input type="hidden" name="imdbID" value="<%= movie.imdbID %>">
+            <input type="hidden" name="title" value="<%= movie.Title %>">
+            <input type="hidden" name="year" value="<%= movie.Year %>">
+            <button type="submit" class="save-button">Save</button>
+          </form>
+        </div>
+        <% if ((index + 1) % 4 === 0 && index !== movies.length - 1) { %>
+          </div><div class="movie-item">
+        <% } %>
+      <% }); %>
+    </

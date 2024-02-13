@@ -1,7 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('partials/header') %>
-<body>
+    <head>
+        
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
+    
+    
+h2, h3{
+  font-family: "Titillium Web", sans-serif;   
+}
+    
+.container {
+  margin: auto;
+  padding-right: 3vw;
+  padding-left: 3vw;
+  overflow: hidden;
+  width: 80%;
+  position: relative; /* Add relative positioning to the container */
+  background-color: #c2c2d6;
+    
+  margin-bottom: 75px;
+}
+
+.search-form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 20px auto 0; /* Add margin at the top */
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+
+.search-form input[type="text"] {
+  flex: 1;
+  margin-right: 10px; /* Reduce spacing between input and button */
+  padding: 8px; /* Reduce padding for the input field */
+  font-size: 14px; /* Reduce font size */
+  border-radius: 5px;
+    font-family: "Titillium Web", sans-serif;
+}
+
+.search-form button {
+  background-color: #7575a3;
+  color: white;
+  border: none;
+  border-radius: 5px; /* Reduce border radius */
+  cursor: pointer;
+  font-size: 14px; /* Reduce font size */
+  padding: 8px 16px; /* Reduce padding for the button */
+  transition: background-color 0.3s ease;
+font-family: "Titillium Web", sans-serif;
+}
+
+.search-form button:hover {
+  background-color: #5d5d91;
+}
+
+
+
+.select-container {
+  margin-bottom: 10px; /* Add bottom margin for spacing */
+    font-family: "Titillium Web", sans-serif;
+}
+
+ul {
+  list-style-type: none; /* Remove bullet points */
+}
+
+
+.movie-item {
+  margin-bottom: 20px; /* Add margin between movie items */
+    margin-bottom= 100px;
+}
+
+.movie-container {
+  display: flex;
+}
+
+.poster {
+  flex: 1; /* Take up 50% of the container */
+  margin-right: 20px; /* Adjust as needed */
+}
+
+.poster img {
+  max-width: 100%; /* Ensure image fits container */
+  border-radius: 10px; /* Add border radius */
+  border: 3px solid #7575a3; /* Add border */
+  box-sizing: border-box; /* Include border in image dimensions*/
+    margin-top: 15px;
+}
+
+
+.movie-info {
+  flex: 2; /* Take up 50% of the container */
+  display: flex;
+  flex-direction: column;
+    margin-top: 20px;
+}
+
+
+.title {
+    text-decoration: none; /* Remove underline */
+    color: #000; /* Set initial color */
+}
+
+.title:hover {
+    color: #ececf9; /* Change color on hover */
+    text-decoration: none;
+}
+
+
+.watch-button,
+.delete-button {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #9f9fdf; /* Blue color */
+  color: #fff; /* White text color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 16px;
+  margin-right: 10px; /* Add some spacing between buttons */
+    font-family: "Titillium Web", sans-serif;
+}
+
+.watch-button:hover,
+.delete-button:hover {
+  background-color: #7979d2; /* Darker blue color on hover */
+}     
+        
+    </style>
+    
+    
+    </head>
+<body style="background-color: #666699;">
   <% if (flashMessages.info) { %>
     <div class="alert alert-info" id = "info-alert">
       <%= flashMessages.info %>
@@ -12,10 +148,13 @@
     <div class="alert alert-info" id = "info-alert">
       <%= flashMessages.warning %>
     </div>
-  <% } %> 
+  <% } %>
+    
     
     
   <div class="container">
+      
+      
     <form class="search-form" action="/search" method="POST">
       <input class="form-control mr-sm-2" type="text" name="movieTitle" placeholder="Search...">
       <button class="btn btn-primary" type="submit">Search</button>
@@ -28,6 +167,7 @@
       Sort by:
       <select onchange="window.location=this.value">
         <option value="">Select an option</option>
+          
         <option value="/sort/title" <% if (sortType === 'title') { %> selected <% } %> >Movie Title</option>
           
           
@@ -38,6 +178,8 @@
           
           
         <option value="/sort/rating"<% if (sortType === 'rating') { %> selected <% } %>>Highly Rated</option>
+          
+          
       </select>   
     </div>
       
@@ -45,7 +187,6 @@
         Filter by Genre: <select onchange="window.location=this.value">
         <option value="">Select an option</option>
         
-    
         <option value="filter?genre=action" >Action</option>
         
         <option value="filter?genre=horror" >Horror</option>
@@ -85,14 +226,19 @@
 
               <div class="movie-info">
                 
-                <a href="info/<%= movie._id%>" ><h3><%= movie.title %> (<%= movie.year %>)</h3></a>
+               <a href="info/<%= movie._id%>" class="title">
+                   
+                   
+                <h2><%= movie.title %> (<%= movie.year %>)</h2></a>
+
             
                 
                 <h3>Times Watched: <%= movie.timesWatched %></h3> 
                 <h3>Rating: <%= movie.rating %></h3>
                 <div class="movie-actions">
-                  <a href="watch/<%= movie._id %>">Watch</a>
-                  <a href="delete/<%= movie._id %>">Delete</a>
+                  <button class="watch-button" onclick="window.location.href='watch/<%= movie._id %>'">Watch</button>
+                    <button class="delete-button" onclick="window.location.href='delete/<%= movie._id %>'">Delete</button>
+
                 </div>
               </div>
             </div>
